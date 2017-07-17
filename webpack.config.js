@@ -30,7 +30,7 @@ module.exports = {
   },
 
   // enable source mapping in devmode
-  devtool: 'cheap-eval-source-map',
+  devtool: 'source-map',
 
   devServer: {
     // without this below line react-router won't work

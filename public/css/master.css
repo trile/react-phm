@@ -1,0 +1,9 @@
+td {
+  text-align: center;
+  min-width: 125px;
+  padding: 20px;
+}
+
+td > .desc {
+  min-height: 50px;
+}
