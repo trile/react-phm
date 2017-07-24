@@ -6,6 +6,8 @@ import {BrowserRouter, Route, Switch } from 'react-router-dom';
 import HomeIndex from './components/home-index';
 import Weather from './components/weather';
 
+
+
 ReactDOM.render(
   <BrowserRouter>
     <Switch>

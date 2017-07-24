@@ -1,9 +1,48 @@
-td {
+body {
+  color: #424953;
+}
+
+.forecast td {
   text-align: center;
   min-width: 125px;
   padding: 20px;
 }
 
-td > .desc {
+.forecast td > .desc {
   min-height: 50px;
+}
+
+.forecast-icon,
+.weather-icon {
+  color: #4b89da;
+}
+
+.weather tr:not(:first-child) td  {
+  padding: 0 20px;
+  border: none;
+  vertical-align: middle;
+}
+
+.weather .description {
+  text-transform: capitalize;
+}
+
+.weather .temperature {
+  font-size: 3rem;
+  margin-right: 30px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.weather img.icon {
+  min-width: 100px;
+}
+
+td.weather-attr {
+  color: #777777;
+}
+
+.weather-attr-title {
+  font-size: .7rem;
+  margin-top: 10px;
 }
