@@ -1,0 +1,6 @@
+{
+  "api_key": {
+    "OWM": "api",
+    "DARKSKY": "api"
+  }
+}

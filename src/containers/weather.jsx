@@ -1,18 +1,12 @@
 import React, {Component} from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+
 import moment from 'moment';
 import ReactSkycons from '../lib/ReactSkycons';
 
-const API_KEY = 'da59c22dcb14a57e3d3d61d7f986db8e';
-const FORECAST_URL = `http://api.openweathermap.org/data/2.5/forecast?units=metric&appid=${API_KEY}`;
-const CURRENT_WEATHER_URL = `http://api.openweathermap.org/data/2.5/weather?units=metric&appid=${API_KEY}`;
-const CITY = '1566083';
-const ICON_URL = 'http://openweathermap.org/img/w/'
-
-const DARKSKY_API_KEY = 'e475ad34fdb8bf629c28b8e1636581e7'
-const PMH_LON = '10.72717'
-const PMH_LAT = '106.7134471'
-const DARKSKY_BASED = `https://api.darksky.net/forecast/${DARKSKY_API_KEY}`;
+import { fetchForecast, fetchCurrentWeather } from '../actions/';
 
 const OWMCodeToIcon = {
   '01d': 'CLEAR_DAY',
@@ -38,27 +32,12 @@ const OWMCodeToIcon = {
 class Weather extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      weather: null,
-      forecast: null
-    }
   }
 
   componentDidMount() {
-    const forecast_url = `${FORECAST_URL}&id=${CITY}`;
-    const current_weather_url = `${CURRENT_WEATHER_URL}&id=${CITY}`;
-
-    axios.get(forecast_url)
-      .then(res => {
-        this.setState({forecast: res.data});
-      });
-
-    axios.get(current_weather_url)
-      .then(res => {
-        this.setState({weather: res.data});
-      });
-
+    this.props.fetchForecast();
+    this.props.fetchCurrentWeather();
+    // fetchCurrentWeather();
   }
 
   renderForecast = (data) => {
@@ -74,8 +53,7 @@ class Weather extends Component {
     )
   }
 
-  renderWeather = () => {
-    const data = this.state.weather;
+  renderWeather = (data) => {
     const sunrise = moment.unix(data.sys.sunrise);
     const sunset = moment.unix(data.sys.sunset);
     sunrise.local();
@@ -114,19 +92,22 @@ class Weather extends Component {
   }
 
   render() {
-    if (!this.state.forecast || !this.state.weather) {
+    let {forecast, current_weather} = this.props;
+    console.log(forecast);
+    console.log(current_weather);
+    if (!forecast.list || !current_weather.main ) {
       return <div>... Loading ...</div>
     }
 
     return (
     <div>
       <h1>Current</h1>
-      {this.renderWeather()}
+      {this.renderWeather(current_weather)}
       <h1>Next 12 hours</h1>
       <table className="table table-responsive forecast">
         <tbody>
           <tr>
-            {this.state.forecast.list.slice(0,5).map(this.renderForecast)}
+            {this.props.forecast.list.slice(0,5).map(this.renderForecast)}
           </tr>
         </tbody>
       </table>
@@ -134,4 +115,14 @@ class Weather extends Component {
   )}
 }
 
-export default Weather;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({fetchForecast, fetchCurrentWeather}, dispatch);
+}
+
+function mapStateToProps (state) {
+  console.log(state);
+  let { weather } = state;
+  return {forecast: weather.forecast, current_weather: weather.current_weather};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Weather);
